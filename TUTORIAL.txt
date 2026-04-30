@@ -1,0 +1,86 @@
+G-MASS — Guia de Uso
+O que é o G-MASS?
+O G-MASS é um sistema de envio de e-mails em lote pelo Gmail. Com ele você importa uma planilha com os destinatários e dispara todos os e-mails de uma vez, sem precisar enviar um por um.
+
+Antes de começar — Senha de App
+O G-MASS não usa sua senha normal do Gmail. Ele usa uma Senha de App, que é uma senha especial gerada pelo Google para permitir que programas externos enviem e-mails pela sua conta.
+Como gerar sua Senha de App:
+
+Acesse myaccount.google.com
+Clique em Segurança no menu lateral
+Em Como você faz login no Google, clique em Verificação em duas etapas e ative se ainda não estiver ativa
+Volte em Segurança e procure por Senhas de app — pode usar a barra de busca da página
+No campo de nome escreva G-MASS e clique em Criar
+O Google vai gerar uma senha de 16 caracteres — copie ela
+Cole essa senha no G-MASS ao fazer login — sem espaços
+
+
+⚠️ Essa senha aparece uma única vez. Se perder, basta gerar uma nova.
+
+
+Primeiro acesso
+
+Abra o G-MASS
+Aguarde a tela de carregamento
+Na tela de login, preencha:
+
+E-mail Gmail — seu endereço completo (ex: seuemail@gmail.com)
+Senha de app — a senha de 16 caracteres gerada no passo anterior
+
+
+Marque Lembrar credenciais se quiser entrar automaticamente da próxima vez
+Clique em Entrar
+
+
+Preparando a planilha
+O G-MASS lê uma planilha Excel (.xlsx) com os destinatários. Ela precisa ter exatamente 4 colunas com esses nomes:
+nomeparaccassuntoADM 1 — SPadm1@empresa.comfinanceiro@empresa.comCobrança JaneiroADM 2 — RJadm2@empresa.comCobrança Janeiro
+
+nome — identificação do destinatário (aparece na lista do G-MASS)
+para — e-mail principal do destinatário (obrigatório)
+cc — e-mail para cópia (opcional — pode deixar vazio)
+assunto — assunto do e-mail que esse destinatário vai receber
+
+
+💡 Não sabe como montar a planilha? Clique em Baixar modelo dentro do G-MASS — um arquivo Excel já formatado será salvo no seu computador. Basta preencher com seus dados.
+
+
+Enviando os e-mails
+Passo 1 — Importe a planilha
+Clique em Importar Excel e selecione seu arquivo. Os destinatários vão aparecer na tabela com o status Aguardando.
+Passo 2 — Escreva a mensagem
+No campo Mensagem, escreva o texto do e-mail. Esse texto será enviado igual para todos os destinatários — apenas o assunto muda conforme a planilha.
+Passo 3 — Selecione a assinatura (opcional)
+Se quiser adicionar uma assinatura em imagem ao final do e-mail, selecione uma no campo Assinatura. Para cadastrar uma nova assinatura clique em + Adicionar e selecione o arquivo de imagem (JPG ou PNG).
+Passo 4 — Configure o delay
+O delay é uma pausa entre cada envio. O valor recomendado é de 3 a 5 segundos — isso evita que o Gmail bloqueie sua conta por envio em massa. Para listas pequenas (menos de 20 e-mails) pode deixar em 1 segundo.
+Passo 5 — Confira a prévia
+Clique em Prévia do e-mail para ver como o e-mail vai aparecer para o destinatário antes de enviar. Se estiver tudo certo, clique em Confirmar e enviar.
+Passo 6 — Acompanhe o envio
+A barra de progresso mostra o andamento em tempo real. Cada linha da tabela atualiza com o status:
+
+🟢 Enviado — e-mail entregue com sucesso
+🔵 Enviando — em andamento
+🔴 Erro — falha no envio (o motivo aparece na linha)
+
+
+Limites do Gmail
+O Gmail tem um limite de envios diários:
+Tipo de contaLimite diárioGmail gratuito (@gmail.com)500 e-mails/diaGoogle Workspace (corporativo)2.000 e-mails/dia
+
+⚠️ Se atingir o limite, o Gmail bloqueia os envios por 24 horas. Use o delay e não ultrapasse esses valores.
+
+
+Dúvidas frequentes
+O G-MASS usa minha senha do Gmail?
+Não. Ele usa uma Senha de App — uma senha separada e específica para o sistema. Sua senha principal do Gmail nunca é usada.
+Posso revogar o acesso do G-MASS à minha conta?
+Sim. Acesse myaccount.google.com/apppasswords, localize a senha criada para o G-MASS e clique em excluir.
+O e-mail vai para o spam dos destinatários?
+Depende do conteúdo. Para reduzir o risco: evite palavras como "grátis", "promoção" ou "clique aqui", use um texto direto e profissional, e mantenha o delay entre os envios.
+Posso enviar para quantas pessoas de uma vez?
+Sem limite técnico no G-MASS — mas respeite o limite diário do Gmail descrito acima.
+Esqueci minha Senha de App. O que faço?
+Gere uma nova em myaccount.google.com/apppasswords e atualize no G-MASS clicando em Sair e fazendo login novamente com a nova senha.
+
+G-MASS — Sistema de envio em lote via Gmail- por: Ygor Bandeira

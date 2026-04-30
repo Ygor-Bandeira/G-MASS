@@ -1,0 +1,28 @@
+# Credenciais e chaves — NUNCA subir
+credenciais.dat
+chave.key
+.env
+
+# Assinaturas (contém caminhos do seu PC)
+assinaturas.json
+
+# Planilhas de teste
+*.xlsx
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+dist/
+*.egg-info/
+
+# PyInstaller
+*.spec
+*.exe
+
+# Sistema
+.DS_Store
+Thumbs.db

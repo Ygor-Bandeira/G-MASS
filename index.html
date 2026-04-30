@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>G-MASS</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; font-family:'Segoe UI',Arial,sans-serif; }
+body { background:#0f0f1a; color:#e0e0ff; height:100vh; overflow:hidden; }
+
+.page { display:none; width:100%; height:100vh; }
+.page.active { display:flex; }
+
+/* ══ LOADING ══ */
+#page-loading {
+  align-items:center; justify-content:center;
+  flex-direction:column; gap:24px;
+  background:#0f0f1a;
+}
+.loading-icon { width:64px; height:64px; background:#1a1a3e; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:30px; border:1px solid #2d2d5e; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.7;transform:scale(.96)} }
+.loading-title { font-size:18px; font-weight:700; color:#e0e0ff; }
+.loading-sub   { font-size:12px; color:#4a5568; }
+.loading-bar-wrap { width:200px; background:#1a1a2e; border-radius:999px; height:4px; overflow:hidden; }
+.loading-bar { background:linear-gradient(90deg,#1f3a8f,#4a90d9); height:100%; width:0%; border-radius:999px; animation: loadbar 1.8s ease-in-out infinite; }
+@keyframes loadbar { 0%{width:0%;margin-left:0} 50%{width:60%;margin-left:20%} 100%{width:0%;margin-left:100%} }
+.loading-dots span { display:inline-block; width:6px; height:6px; border-radius:50%; background:#4a90d9; margin:0 3px; animation: dot 1.2s ease-in-out infinite; }
+.loading-dots span:nth-child(2) { animation-delay:.2s; }
+.loading-dots span:nth-child(3) { animation-delay:.4s; }
+@keyframes dot { 0%,80%,100%{opacity:.2;transform:scale(.8)} 40%{opacity:1;transform:scale(1)} }
+
+/* ══ LOGIN ══ */
+#page-login { align-items:center; justify-content:center; background:#0f0f1a; animation: fadein .4s ease; }
+@keyframes fadein { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.login-card { background:#12122a; border:1px solid #2d2d5e; border-radius:16px; padding:36px 32px; width:100%; max-width:400px; }
+.logo-area  { text-align:center; margin-bottom:28px; }
+.logo-icon  { width:56px; height:56px; background:#1a1a3e; border-radius:14px; display:inline-flex; align-items:center; justify-content:center; font-size:26px; margin-bottom:12px; border:1px solid #2d2d5e; }
+.logo-title { font-size:18px; font-weight:700; color:#e0e0ff; }
+.logo-sub   { font-size:12px; color:#4a5568; margin-top:4px; }
+.field { margin-bottom:16px; }
+.field label { display:block; font-size:10px; font-weight:700; color:#4a90d9; letter-spacing:.08em; text-transform:uppercase; margin-bottom:6px; }
+.field input { width:100%; background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:#e0e0ff; font-size:13px; padding:11px 14px; outline:none; transition:border-color .15s; }
+.field input:focus { border-color:#4a90d9; }
+.field input::placeholder { color:#2d3748; }
+.hint { font-size:11px; color:#4a5568; margin-top:6px; line-height:1.5; }
+.hint a { color:#4a90d9; text-decoration:none; cursor:pointer; }
+.hint a:hover { text-decoration:underline; }
+.remember-row { display:flex; align-items:center; gap:8px; margin-bottom:16px; }
+.remember-row input[type=checkbox] { width:16px; height:16px; accent-color:#4a90d9; cursor:pointer; }
+.remember-row label { font-size:12px; color:#4a5568; cursor:pointer; }
+.btn-login { width:100%; padding:12px; background:linear-gradient(135deg,#1f3a8f,#4a90d9); color:white; font-size:14px; font-weight:700; border-radius:10px; border:none; cursor:pointer; transition:opacity .15s; box-shadow:0 4px 15px rgba(74,144,217,.25); }
+.btn-login:hover { opacity:.88; }
+.btn-login:disabled { opacity:.5; cursor:not-allowed; }
+.login-status { border-radius:8px; padding:10px 14px; font-size:12px; margin-top:14px; text-align:center; display:none; }
+.login-status.ok   { background:#0d2d1a; border:1px solid #166534; color:#4ade80; display:block; }
+.login-status.err  { background:#2d1a1a; border:1px solid #7f1d1d; color:#f87171; display:block; }
+.login-status.info { background:#0d1a3a; border:1px solid #1e3a8a; color:#7eb8f7; display:block; }
+
+/* ══ PRINCIPAL ══ */
+#page-main { flex-direction:row; animation: fadein .3s ease; }
+.sidebar { width:56px; background:#0a0a14; border-right:1px solid #1e1e3a; display:flex; flex-direction:column; align-items:center; padding:16px 0; gap:8px; flex-shrink:0; }
+.nav-btn { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; background:transparent; border:none; color:#4a5568; transition:all .15s; }
+.nav-btn:hover, .nav-btn.active { background:#1a1a3e; color:#4a90d9; }
+.nav-btn.logout { margin-top:auto; color:#f87171; }
+.nav-btn.logout:hover { background:#2d1a1a; }
+.main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+.titlebar { background:#0a0a14; padding:10px 20px; display:flex; align-items:center; gap:10px; border-bottom:1px solid #1e1e3a; flex-shrink:0; }
+.dots { display:flex; gap:6px; }
+.dot { width:12px; height:12px; border-radius:50%; }
+.dot-r{background:#ff5f57;} .dot-y{background:#febc2e;} .dot-g{background:#28c840;}
+.titlebar-text  { font-size:12px; color:#4a5568; }
+.titlebar-email { margin-left:auto; font-size:11px; color:#4a90d9; background:#1a1a3e; padding:4px 12px; border-radius:20px; border:1px solid #2d2d5e; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.content { flex:1; overflow-y:auto; padding:20px 24px; }
+.content::-webkit-scrollbar { width:6px; }
+.content::-webkit-scrollbar-track { background:#0f0f1a; }
+.content::-webkit-scrollbar-thumb { background:#1e1e3a; border-radius:3px; }
+.page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+.page-title { font-size:20px; font-weight:700; color:#e0e0ff; }
+.page-sub   { font-size:12px; color:#4a5568; margin-top:2px; }
+.badge-smtp { background:#1a1a3e; border:1px solid #2d2d5e; border-radius:20px; padding:6px 14px; font-size:11px; color:#4a90d9; font-weight:600; }
+.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:16px; }
+.stat { background:#12122a; border:1px solid #1e1e3a; border-radius:12px; padding:14px 16px; }
+.stat-label { font-size:10px; color:#4a5568; text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px; }
+.stat-value { font-size:24px; font-weight:700; }
+.v-blue{color:#4a90d9;} .v-green{color:#4ade80;} .v-red{color:#f87171;}
+.panel { background:#12122a; border:1px solid #1e1e3a; border-radius:12px; padding:18px; margin-bottom:14px; }
+.panel-title { font-size:10px; font-weight:700; color:#4a90d9; letter-spacing:.1em; text-transform:uppercase; margin-bottom:12px; }
+.import-row { display:flex; align-items:center; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+.btn-import { padding:8px 16px; background:#1a1a3e; color:#4a90d9; font-size:12px; font-weight:700; border-radius:8px; border:1px solid #2d2d5e; cursor:pointer; transition:all .15s; }
+.btn-import:hover { background:#22224e; border-color:#4a90d9; }
+.btn-modelo { padding:8px 16px; background:#0d2d1a; color:#4ade80; font-size:12px; font-weight:700; border-radius:8px; border:1px solid #166534; cursor:pointer; transition:all .15s; }
+.btn-modelo:hover { background:#133d23; }
+.file-label { font-size:11px; color:#4a5568; }
+.file-label.ok { color:#4ade80; }
+.table-wrap { overflow-x:auto; border-radius:8px; overflow:hidden; }
+table { width:100%; border-collapse:collapse; font-size:11px; }
+th { padding:8px 10px; text-align:left; color:#4a5568; font-weight:600; border-bottom:1px solid #1e1e3a; font-size:10px; text-transform:uppercase; letter-spacing:.06em; background:#0f0f1a; }
+td { padding:8px 10px; color:#9aa5b4; border-bottom:0.5px solid #1a1a2e; transition:background .1s; }
+tr:hover td { background:#1a1a3e; }
+.badge { display:inline-block; border-radius:999px; padding:2px 9px; font-size:10px; font-weight:600; }
+.badge-ok   { background:#0d2d1a; color:#4ade80; }
+.badge-wait { background:#1a1a2e; color:#4a5568; }
+.badge-send { background:#0d1a3a; color:#4a90d9; }
+.badge-err  { background:#2d1a1a; color:#f87171; }
+textarea { width:100%; background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:#e0e0ff; font-size:13px; padding:12px 14px; resize:vertical; min-height:100px; outline:none; font-family:'Segoe UI',Arial,sans-serif; transition:border-color .15s; }
+textarea:focus { border-color:#4a90d9; }
+.sig-row { display:flex; gap:8px; align-items:center; }
+select { background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:#e0e0ff; font-size:12px; padding:8px 12px; outline:none; flex:1; cursor:pointer; }
+.btn-sm { padding:8px 16px; font-size:11px; font-weight:700; border-radius:8px; border:none; cursor:pointer; transition:all .15s; }
+.btn-add { background:#1a1a3e; color:#4a90d9; border:1px solid #2d2d5e; }
+.btn-add:hover { background:#22224e; }
+.btn-rem { background:#2d1a1a; color:#f87171; border:1px solid #3d2222; }
+.btn-rem:hover { background:#3d2222; }
+.delay-row { display:flex; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
+.delay-label  { font-size:11px; color:#4a5568; white-space:nowrap; }
+.delay-slider { flex:1; min-width:100px; accent-color:#4a90d9; }
+.delay-val    { font-size:12px; color:#4a90d9; font-weight:700; min-width:28px; }
+.delay-countdown { font-size:11px; color:#4a5568; min-height:16px; margin-bottom:8px; }
+.delay-track { background:#1a1a2e; border-radius:999px; height:3px; overflow:hidden; margin-bottom:14px; }
+.delay-fill  { background:#4a5568; height:100%; width:0%; border-radius:999px; transition:width 1s linear; }
+.progress-row { display:flex; justify-content:space-between; margin-bottom:6px; }
+.progress-label { font-size:11px; color:#4a5568; }
+.progress-pct   { font-size:11px; color:#4a90d9; font-weight:600; }
+.progress-track { background:#1a1a2e; border-radius:999px; height:6px; overflow:hidden; margin-bottom:16px; }
+.progress-fill  { background:linear-gradient(90deg,#1f3a8f,#4a90d9,#7eb8f7); height:100%; width:0%; border-radius:999px; transition:width .4s ease; }
+.footer-row { display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; }
+.btn-clear   { padding:10px 20px; background:#1a1a2e; color:#4a5568; font-size:12px; font-weight:600; border-radius:10px; border:1px solid #1e1e3a; cursor:pointer; transition:all .15s; }
+.btn-clear:hover { background:#1e1e3a; color:#9aa5b4; }
+.btn-preview { padding:10px 20px; background:#1a1a3e; color:#7eb8f7; font-size:12px; font-weight:700; border-radius:10px; border:1px solid #2d2d5e; cursor:pointer; transition:all .15s; }
+.btn-preview:hover { background:#22224e; }
+.btn-send { padding:11px 30px; background:linear-gradient(135deg,#1f3a8f,#4a90d9); color:white; font-size:13px; font-weight:700; border-radius:10px; border:none; cursor:pointer; box-shadow:0 4px 15px rgba(74,144,217,.3); transition:opacity .15s; }
+.btn-send:hover { opacity:.85; }
+.btn-send:disabled { opacity:.4; cursor:not-allowed; }
+.status-text { font-size:11px; color:#4a5568; text-align:center; margin-top:10px; min-height:16px; }
+.status-text.ok   { color:#4ade80; }
+.status-text.info { color:#4a90d9; }
+.status-text.err  { color:#f87171; }
+.modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:100; align-items:center; justify-content:center; }
+.modal-bg.show { display:flex; }
+.modal { background:#12122a; border:1px solid #2d2d5e; border-radius:14px; padding:24px; width:340px; }
+.modal h3 { font-size:15px; color:#e0e0ff; margin-bottom:14px; }
+.modal input { width:100%; background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:#e0e0ff; font-size:13px; padding:10px 12px; outline:none; margin-bottom:14px; }
+.modal input:focus { border-color:#4a90d9; }
+.modal-btns { display:flex; gap:8px; justify-content:flex-end; }
+.modal-cancel { padding:8px 16px; background:#1a1a2e; color:#4a5568; border-radius:8px; border:1px solid #1e1e3a; cursor:pointer; font-size:12px; }
+.modal-ok { padding:8px 16px; background:#1f3a8f; color:#7eb8f7; border-radius:8px; border:none; cursor:pointer; font-size:12px; font-weight:700; }
+.modal-preview { background:#12122a; border:1px solid #2d2d5e; border-radius:14px; padding:24px; width:560px; max-width:95vw; max-height:80vh; overflow-y:auto; }
+.modal-preview h3 { font-size:15px; color:#e0e0ff; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; }
+.preview-field { margin-bottom:10px; }
+.preview-field label { font-size:10px; font-weight:700; color:#4a90d9; letter-spacing:.08em; text-transform:uppercase; display:block; margin-bottom:4px; }
+.preview-field .value { font-size:12px; color:#9aa5b4; background:#0f0f1a; border:1px solid #1e1e3a; border-radius:6px; padding:8px 12px; }
+.preview-body { font-size:13px; color:#e0e0ff; background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; padding:14px; line-height:1.7; white-space:pre-wrap; margin-bottom:10px; }
+.preview-sig  { font-size:11px; color:#4a5568; background:#0f0f1a; border:1px solid #1e1e3a; border-radius:6px; padding:8px 12px; margin-bottom:16px; }
+.preview-info { font-size:11px; color:#4a5568; margin-bottom:16px; padding:10px 14px; background:#1a1a2e; border-radius:8px; border:1px solid #1e1e3a; }
+.preview-btns { display:flex; gap:8px; justify-content:flex-end; }
+.btn-cancelar-prev  { padding:10px 20px; background:#1a1a2e; color:#4a5568; border-radius:8px; border:1px solid #1e1e3a; cursor:pointer; font-size:13px; }
+.btn-confirmar-prev { padding:10px 24px; background:linear-gradient(135deg,#1f3a8f,#4a90d9); color:white; border-radius:8px; border:none; cursor:pointer; font-size:13px; font-weight:700; }
+</style>
+</head>
+<body>
+
+<!-- ══ LOADING ══ -->
+<div class="page active" id="page-loading">
+  <div class="loading-icon">✉</div>
+  <div>
+    <div class="loading-title">G-MASS</div>
+    <div class="loading-sub" style="text-align:center;margin-top:4px;">Inicializando...</div>
+  </div>
+  <div class="loading-bar-wrap">
+    <div class="loading-bar"></div>
+  </div>
+  <div class="loading-dots">
+    <span></span><span></span><span></span>
+  </div>
+</div>
+
+<!-- ══ LOGIN INFINITO VAI TRAVAR E N SEI ARRUMAR AINDA══ -->
+<div class="page" id="page-login">
+  <div class="login-card">
+    <div class="logo-area">
+      <div class="logo-icon">✉</div>
+      <div class="logo-title">G-MASS</div>
+      <div class="logo-sub">Acesse com sua conta Gmail</div>
+    </div>
+    <div class="field">
+      <label>E-mail Gmail</label>
+      <input type="email" id="input-email" placeholder="seu@gmail.com" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Senha de app</label>
+      <input type="password" id="input-senha" placeholder="xxxx xxxx xxxx xxxx" autocomplete="off">
+      <div class="hint">Não é sua senha normal.
+        <a onclick="abrirGuia()">Como gerar uma senha de app?</a>
+      </div>
+    </div>
+    <div class="remember-row">
+      <input type="checkbox" id="chk-lembrar" checked>
+      <label for="chk-lembrar">Lembrar credenciais neste computador</label>
+    </div>
+    <button class="btn-login" id="btn-login" onclick="fazerLogin()">
+      Entrar ➤
+    </button>
+    <div class="login-status" id="login-status"></div>
+  </div>
+</div>
+
+<!-- ══ PRINCIPAL ══ -->
+<div class="page" id="page-main">
+  <div class="sidebar">
+    <button class="nav-btn active" title="Envio">✉</button>
+    <button class="nav-btn" title="Assinaturas"
+      onclick="document.getElementById('sec-ass').scrollIntoView({behavior:'smooth'})">✍</button>
+    <button class="nav-btn logout" title="Sair" onclick="fazerLogout()">⏻</button>
+  </div>
+
+  <div class="main">
+    <div class="titlebar">
+      <div class="dots">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+      </div>
+      <span class="titlebar-text">G-MASS</span>
+      <span class="titlebar-email" id="titlebar-email"></span>
+    </div>
+
+    <div class="content">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Disparo em lote</div>
+          <div class="page-sub">Importe sua planilha e envie para todos</div>
+        </div>
+        <div class="badge-smtp">Gmail SMTP</div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="stat-label">Total</div><div class="stat-value v-blue"  id="stat-total">0</div></div>
+        <div class="stat"><div class="stat-label">Enviados</div><div class="stat-value v-green" id="stat-ok">0</div></div>
+        <div class="stat"><div class="stat-label">Erros</div><div class="stat-value v-red"   id="stat-err">0</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Lista de destinatários</div>
+        <div class="import-row">
+          <button class="btn-import" onclick="importarExcel()">+ Importar Excel</button>
+          <button class="btn-modelo" onclick="baixarModelo()">⬇ Baixar modelo</button>
+          <span class="file-label" id="label-arquivo">Nenhum arquivo selecionado</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Nome</th><th>Para</th><th>CC</th><th>Assunto</th><th>Status</th></tr>
+            </thead>
+            <tbody id="tabela-body">
+              <tr><td colspan="5" style="text-align:center;color:#4a5568;padding:20px;">
+                Nenhum destinatário carregado
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Mensagem — mesmo texto para todos</div>
+        <textarea id="campo-corpo" placeholder="Digite sua mensagem aqui..."></textarea>
+      </div>
+
+      <div class="panel" id="sec-ass">
+        <div class="panel-title">Assinatura</div>
+        <div class="sig-row">
+          <select id="combo-ass"><option value="">Nenhuma</option></select>
+          <button class="btn-sm btn-add" onclick="abrirModalAssinatura()">+ Adicionar</button>
+          <button class="btn-sm btn-rem" onclick="removerAssinatura()">Remover</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Configurações de envio</div>
+        <div class="delay-row">
+          <span class="delay-label">Delay entre envios:</span>
+          <input type="range" class="delay-slider" id="delay-slider" min="0" max="10" value="3"
+            oninput="document.getElementById('delay-val').textContent=this.value+'s'">
+          <span class="delay-val" id="delay-val">3s</span>
+        </div>
+        <div class="delay-countdown" id="delay-countdown"></div>
+        <div class="delay-track"><div class="delay-fill" id="delay-fill"></div></div>
+        <div class="progress-row">
+          <span class="progress-label" id="label-prog">Aguardando...</span>
+          <span class="progress-pct"   id="label-pct">0%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="barra"></div></div>
+        <div class="footer-row">
+          <button class="btn-clear"   onclick="limpar()">Limpar tudo</button>
+          <button class="btn-preview" onclick="abrirPrevia()">Prévia do e-mail</button>
+          <button class="btn-send" id="btn-enviar" onclick="iniciarEnvio()">
+            Enviar para todos ➤
+          </button>
+        </div>
+        <div class="status-text" id="label-status">Importe uma planilha para começar.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Nova assinatura -->
+<div class="modal-bg" id="modal-ass">
+  <div class="modal">
+    <h3>Nova assinatura</h3>
+    <input type="text" id="input-nome-ass" placeholder="Nome (ex: João Silva)">
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="fecharModal('modal-ass')">Cancelar</button>
+      <button class="modal-ok"     onclick="confirmarAssinatura()">Selecionar imagem</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Prévia -->
+<div class="modal-bg" id="modal-preview">
+  <div class="modal-preview">
+    <h3>Prévia do e-mail
+      <span style="font-size:11px;color:#4a5568;font-weight:400;">1º destinatário como exemplo</span>
+    </h3>
+    <div class="preview-field">
+      <label>De</label>
+      <div class="value" id="prev-de"></div>
+    </div>
+    <div class="preview-field">
+      <label>Para</label>
+      <div class="value" id="prev-para"></div>
+    </div>
+    <div class="preview-field">
+      <label>Assunto</label>
+      <div class="value" id="prev-assunto"></div>
+    </div>
+    <div class="preview-field">
+      <label>Mensagem</label>
+      <div class="preview-body" id="prev-corpo"></div>
+    </div>
+    <div class="preview-sig"  id="prev-sig"></div>
+    <div class="preview-info" id="prev-info"></div>
+    <div class="preview-btns">
+      <button class="btn-cancelar-prev"  onclick="fecharModal('modal-preview')">Fechar</button>
+      <button class="btn-confirmar-prev" onclick="confirmarEnvio()">Confirmar e enviar ➤</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let contatos = [];
+  let statOk   = 0;
+  let statErr  = 0;
+
+  // ── Loading → verifica login de forma assíncrona ──
+  window.addEventListener('pywebviewready', () => {
+    setTimeout(() => {
+      pywebview.api.verificar_login_salvo().then(res => {
+        if (res.logado) {
+          entrarNaSistema(res.email);
+        } else {
+          mostrarPagina('page-login');
+        }
+      }).catch(() => mostrarPagina('page-login'));
+    }, 800); // pequeno delay para o loading aparecer
+  });
+
+  function mostrarPagina(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  // ── Login ──
+  function fazerLogin() {
+    const email   = document.getElementById('input-email').value.trim();
+    const senha   = document.getElementById('input-senha').value.trim();
+    const lembrar = document.getElementById('chk-lembrar').checked;
+    if (!email || !senha) { setLoginStatus('Preencha todos os campos.', 'err'); return; }
+    const btn = document.getElementById('btn-login');
+    btn.disabled = true; btn.textContent = 'Verificando...';
+    setLoginStatus('Conectando ao Gmail...', 'info');
+    pywebview.api.fazer_login(email, senha, lembrar).then(res => {
+      btn.disabled = false; btn.textContent = 'Entrar ➤';
+      if (res.ok) {
+        setLoginStatus('✓ Conectado!', 'ok');
+        setTimeout(() => entrarNaSistema(email), 600);
+      } else {
+        setLoginStatus('✗ ' + res.erro, 'err');
+      }
+    });
+  }
+
+  function entrarNaSistema(email) {
+    document.getElementById('titlebar-email').textContent = email;
+    mostrarPagina('page-main');
+    pywebview.api.get_assinaturas().then(nomes => popularCombo(nomes));
+  }
+
+  function fazerLogout() {
+    if (!confirm('Deseja sair da sua conta?')) return;
+    pywebview.api.fazer_logout().then(() => {
+      document.getElementById('input-email').value = '';
+      document.getElementById('input-senha').value = '';
+      mostrarPagina('page-login');
+      setLoginStatus('', '');
+      limpar();
+    });
+  }
+
+  function abrirGuia() { pywebview.api.abrir_guia_senha_app(); }
+
+  function setLoginStatus(t, tipo) {
+    const el = document.getElementById('login-status');
+    el.textContent = t;
+    el.className   = 'login-status' + (tipo ? ' ' + tipo : '');
+  }
+
+  document.getElementById('input-senha').addEventListener('keydown', e => {
+    if (e.key === 'Enter') fazerLogin();
+  });
+
+  // ── Modelo exl ──
+  function baixarModelo() {
+    pywebview.api.baixar_modelo().then(res => {
+      if (res.ok) setStatus(`Modelo "${res.arquivo}" salvo!`, 'ok');
+      else if (res.erro !== 'Cancelado.') setStatus(res.erro, 'err');
+    });
+  }
+
+  // ── Assinaturas ──
+  function popularCombo(nomes) {
+    const combo = document.getElementById('combo-ass');
+    const atual = combo.value;
+    combo.innerHTML = '<option value="">Nenhuma</option>';
+    nomes.forEach(n => {
+      const opt = document.createElement('option');
+      opt.value = n; opt.textContent = n;
+      combo.appendChild(opt);
+    });
+    if (atual) combo.value = atual;
+  }
+
+  function abrirModalAssinatura() {
+    document.getElementById('input-nome-ass').value = '';
+    document.getElementById('modal-ass').classList.add('show');
+    setTimeout(() => document.getElementById('input-nome-ass').focus(), 100);
+  }
+
+  function fecharModal(id) {
+    document.getElementById(id).classList.remove('show');
+  }
+
+  function confirmarAssinatura() {
+    const nome = document.getElementById('input-nome-ass').value.trim();
+    if (!nome) { alert('Digite um nome.'); return; }
+    fecharModal('modal-ass');
+    pywebview.api.adicionar_assinatura(nome).then(res => {
+      if (res.ok) {
+        popularCombo(res.nomes);
+        document.getElementById('combo-ass').value = nome;
+        setStatus('Assinatura adicionada.', 'ok');
+      } else { setStatus(res.erro, 'err'); }
+    });
+  }
+
+  function removerAssinatura() {
+    const nome = document.getElementById('combo-ass').value;
+    if (!nome) { alert('Selecione uma assinatura.'); return; }
+    if (!confirm(`Remover '${nome}'?`)) return;
+    pywebview.api.remover_assinatura(nome).then(res => {
+      popularCombo(res.nomes);
+      setStatus('Assinatura removida.', 'info');
+    });
+  }
+
+  // ── Excel ──
+  function importarExcel() {
+    pywebview.api.selecionar_excel().then(res => {
+      if (!res.ok) { setStatus(res.erro, 'err'); return; }
+      contatos = res.contatos;
+      document.getElementById('stat-total').textContent = res.total;
+      document.getElementById('stat-ok').textContent    = 0;
+      document.getElementById('stat-err').textContent   = 0;
+      statOk = 0; statErr = 0;
+      const lbl = document.getElementById('label-arquivo');
+      lbl.textContent = `${res.arquivo} — ${res.total} destinatário(s)`;
+      lbl.className   = 'file-label ok';
+      const tbody = document.getElementById('tabela-body');
+      tbody.innerHTML = '';
+      res.contatos.forEach((c, i) => {
+        tbody.innerHTML += `
+          <tr id="row-${i}">
+            <td>${escapeHtml(c.nome)}</td>
+            <td>${escapeHtml(c.para)}</td>
+            <td>${escapeHtml(c.cc||'—')}</td>
+            <td>${escapeHtml(c.assunto)}</td>
+            <td><span class="badge badge-wait" id="badge-${i}">Aguardando</span></td>
+          </tr>`;
+      });
+      setStatus(`${res.total} destinatário(s) carregado(s).`, 'ok');
+    });
+  }
+
+  // ── Prévia ──
+  function abrirPrevia() {
+    if (!contatos.length) { setStatus('Importe uma planilha primeiro.', 'err'); return; }
+    const corpo = document.getElementById('campo-corpo').value.trim();
+    if (!corpo)  { setStatus('Escreva a mensagem.', 'err'); return; }
+    const primeiro = contatos[0];
+    const ass      = document.getElementById('combo-ass').value;
+    const email    = document.getElementById('titlebar-email').textContent;
+    const delay    = document.getElementById('delay-slider').value;
+    document.getElementById('prev-de').textContent      = email;
+    document.getElementById('prev-para').textContent    = primeiro.para + (primeiro.cc ? ` (CC: ${primeiro.cc})` : '');
+    document.getElementById('prev-assunto').textContent = primeiro.assunto;
+    document.getElementById('prev-corpo').textContent   = corpo;
+    document.getElementById('prev-sig').textContent     = ass ? `Assinatura: ${ass}` : 'Sem assinatura.';
+    document.getElementById('prev-info').textContent    =
+      `Será enviado para ${contatos.length} destinatário(s) com delay de ${delay}s entre cada envio.`;
+    document.getElementById('modal-preview').classList.add('show');
+  }
+
+  function confirmarEnvio() {
+    fecharModal('modal-preview');
+    _dispararEnvio();
+  }
+
+  function iniciarEnvio() {
+    if (!contatos.length) { setStatus('Importe uma planilha primeiro.', 'err'); return; }
+    const corpo = document.getElementById('campo-corpo').value.trim();
+    if (!corpo) { setStatus('Escreva a mensagem.', 'err'); return; }
+    abrirPrevia();
+  }
+
+  function _dispararEnvio() {
+    const corpo = document.getElementById('campo-corpo').value.trim();
+    const ass   = document.getElementById('combo-ass').value;
+    const delay = parseInt(document.getElementById('delay-slider').value);
+    statOk = 0; statErr = 0;
+    document.getElementById('stat-ok').textContent  = 0;
+    document.getElementById('stat-err').textContent = 0;
+    document.getElementById('btn-enviar').disabled  = true;
+    document.getElementById('btn-enviar').textContent = 'Enviando...';
+    pywebview.api.iniciar_envio(corpo, ass, delay).then(res => {
+      if (!res.ok) {
+        setStatus(res.erro, 'err');
+        document.getElementById('btn-enviar').disabled    = false;
+        document.getElementById('btn-enviar').textContent = 'Enviar para todos ➤';
+      }
+    });
+  }
+
+  // ── Callbacks Python → JS ──
+  function atualizarStatus(idx, tipo, texto) {
+    const badge = document.getElementById(`badge-${idx}`);
+    if (!badge) return;
+    badge.textContent = texto;
+    badge.className   = 'badge badge-' + (tipo==='ok'?'ok':tipo==='erro'?'err':'send');
+    if (tipo==='ok')   { statOk++;  document.getElementById('stat-ok').textContent  = statOk; }
+    if (tipo==='erro') { statErr++; document.getElementById('stat-err').textContent = statErr; }
+  }
+
+  function atualizarProgresso(atual, total) {
+    const pct = Math.round((atual/total)*100);
+    document.getElementById('barra').style.width      = pct + '%';
+    document.getElementById('label-pct').textContent  = pct + '%';
+    document.getElementById('label-prog').textContent = `Enviando ${atual} de ${total}...`;
+    setStatus(`Enviando ${atual} de ${total}...`, 'info');
+    document.getElementById('delay-fill').style.width     = '0%';
+    document.getElementById('delay-countdown').textContent = '';
+  }
+
+  function atualizarDelay(restante, total) {
+    const pct = Math.round(((total-restante)/total)*100);
+    document.getElementById('delay-fill').style.width      = pct + '%';
+    document.getElementById('delay-countdown').textContent =
+      `Aguardando ${restante}s antes do próximo envio...`;
+  }
+
+  function limparDelay() {
+    document.getElementById('delay-fill').style.width      = '0%';
+    document.getElementById('delay-countdown').textContent = '';
+  }
+
+  function finalizarEnvio(sucesso, erros) {
+    document.getElementById('btn-enviar').disabled    = false;
+    document.getElementById('btn-enviar').textContent = 'Enviar para todos ➤';
+    document.getElementById('label-prog').textContent = `Concluído: ${sucesso} enviados, ${erros} erros.`;
+    limparDelay();
+    setStatus(
+      erros === 0 ? `✓ ${sucesso} e-mail(s) enviados com sucesso.` : `${sucesso} enviados, ${erros} com erro.`,
+      erros === 0 ? 'ok' : 'err');
+  }
+
+  // ── Limpar ──
+  function limpar() {
+    contatos = []; statOk = 0; statErr = 0;
+    document.getElementById('tabela-body').innerHTML =
+      '<tr><td colspan="5" style="text-align:center;color:#4a5568;padding:20px;">Nenhum destinatário carregado</td></tr>';
+    document.getElementById('campo-corpo').value         = '';
+    document.getElementById('barra').style.width         = '0%';
+    document.getElementById('label-pct').textContent     = '0%';
+    document.getElementById('label-prog').textContent    = 'Aguardando...';
+    document.getElementById('label-arquivo').textContent = 'Nenhum arquivo selecionado';
+    document.getElementById('label-arquivo').className   = 'file-label';
+    document.getElementById('stat-total').textContent    = '0';
+    document.getElementById('stat-ok').textContent       = '0';
+    document.getElementById('stat-err').textContent      = '0';
+    limparDelay();
+    setStatus('Importe uma planilha para começar.', '');
+  }
+
+  function setStatus(texto, tipo) {
+    const el = document.getElementById('label-status');
+    el.textContent = texto;
+    el.className   = 'status-text' + (tipo ? ' ' + tipo : '');
+  }
+
+  // ── Segurança: escapa HTML para evitar XSS ──
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;')
+              .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // Fechar modais ao clicar fora
+  ['modal-ass','modal-preview'].forEach(id => {
+    document.getElementById(id).addEventListener('click', function(e) {
+      if (e.target === this) fecharModal(id);
+    });
+  });
+
+  document.getElementById('input-nome-ass').addEventListener('keydown', e => {
+    if (e.key === 'Enter') confirmarAssinatura();
+  });
+</script>
+</body>
+</html>
