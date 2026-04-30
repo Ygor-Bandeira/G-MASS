@@ -10,31 +10,27 @@ body { background:#0f0f1a; color:#e0e0ff; height:100vh; overflow:hidden; }
 .page { display:none; width:100%; height:100vh; }
 .page.active { display:flex; }
 
-/* ══ LOADING ══ */
-#page-loading {
-  align-items:center; justify-content:center;
-  flex-direction:column; gap:24px;
-  background:#0f0f1a;
-}
-.loading-icon { width:64px; height:64px; background:#1a1a3e; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:30px; border:1px solid #2d2d5e; animation: pulse 2s ease-in-out infinite; }
+/* ── LOADING ── */
+#page-loading { align-items:center; justify-content:center; flex-direction:column; gap:24px; background:#0f0f1a; }
+.loading-icon { width:64px; height:64px; background:#1a1a3e; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:30px; border:1px solid #2d2d5e; animation:pulse 2s ease-in-out infinite; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.7;transform:scale(.96)} }
-.loading-title { font-size:18px; font-weight:700; color:#e0e0ff; }
+.loading-title { font-size:20px; font-weight:700; color:#e0e0ff; }
 .loading-sub   { font-size:12px; color:#4a5568; }
 .loading-bar-wrap { width:200px; background:#1a1a2e; border-radius:999px; height:4px; overflow:hidden; }
-.loading-bar { background:linear-gradient(90deg,#1f3a8f,#4a90d9); height:100%; width:0%; border-radius:999px; animation: loadbar 1.8s ease-in-out infinite; }
+.loading-bar { background:linear-gradient(90deg,#1f3a8f,#4a90d9); height:100%; border-radius:999px; animation:loadbar 1.8s ease-in-out infinite; }
 @keyframes loadbar { 0%{width:0%;margin-left:0} 50%{width:60%;margin-left:20%} 100%{width:0%;margin-left:100%} }
-.loading-dots span { display:inline-block; width:6px; height:6px; border-radius:50%; background:#4a90d9; margin:0 3px; animation: dot 1.2s ease-in-out infinite; }
-.loading-dots span:nth-child(2) { animation-delay:.2s; }
-.loading-dots span:nth-child(3) { animation-delay:.4s; }
+.loading-dots span { display:inline-block; width:6px; height:6px; border-radius:50%; background:#4a90d9; margin:0 3px; animation:dot 1.2s ease-in-out infinite; }
+.loading-dots span:nth-child(2){animation-delay:.2s}
+.loading-dots span:nth-child(3){animation-delay:.4s}
 @keyframes dot { 0%,80%,100%{opacity:.2;transform:scale(.8)} 40%{opacity:1;transform:scale(1)} }
 
-/* ══ LOGIN ══ */
-#page-login { align-items:center; justify-content:center; background:#0f0f1a; animation: fadein .4s ease; }
+/* ── LOGIN ── */
+#page-login { align-items:center; justify-content:center; background:#0f0f1a; animation:fadein .4s ease; }
 @keyframes fadein { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 .login-card { background:#12122a; border:1px solid #2d2d5e; border-radius:16px; padding:36px 32px; width:100%; max-width:400px; }
 .logo-area  { text-align:center; margin-bottom:28px; }
 .logo-icon  { width:56px; height:56px; background:#1a1a3e; border-radius:14px; display:inline-flex; align-items:center; justify-content:center; font-size:26px; margin-bottom:12px; border:1px solid #2d2d5e; }
-.logo-title { font-size:18px; font-weight:700; color:#e0e0ff; }
+.logo-title { font-size:20px; font-weight:700; color:#e0e0ff; letter-spacing:.05em; }
 .logo-sub   { font-size:12px; color:#4a5568; margin-top:4px; }
 .field { margin-bottom:16px; }
 .field label { display:block; font-size:10px; font-weight:700; color:#4a90d9; letter-spacing:.08em; text-transform:uppercase; margin-bottom:6px; }
@@ -55,8 +51,8 @@ body { background:#0f0f1a; color:#e0e0ff; height:100vh; overflow:hidden; }
 .login-status.err  { background:#2d1a1a; border:1px solid #7f1d1d; color:#f87171; display:block; }
 .login-status.info { background:#0d1a3a; border:1px solid #1e3a8a; color:#7eb8f7; display:block; }
 
-/* ══ PRINCIPAL ══ */
-#page-main { flex-direction:row; animation: fadein .3s ease; }
+/* ── PRINCIPAL ── */
+#page-main { flex-direction:row; animation:fadein .3s ease; }
 .sidebar { width:56px; background:#0a0a14; border-right:1px solid #1e1e3a; display:flex; flex-direction:column; align-items:center; padding:16px 0; gap:8px; flex-shrink:0; }
 .nav-btn { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; background:transparent; border:none; color:#4a5568; transition:all .15s; }
 .nav-btn:hover, .nav-btn.active { background:#1a1a3e; color:#4a90d9; }
@@ -67,8 +63,8 @@ body { background:#0f0f1a; color:#e0e0ff; height:100vh; overflow:hidden; }
 .dots { display:flex; gap:6px; }
 .dot { width:12px; height:12px; border-radius:50%; }
 .dot-r{background:#ff5f57;} .dot-y{background:#febc2e;} .dot-g{background:#28c840;}
-.titlebar-text  { font-size:12px; color:#4a5568; }
-.titlebar-email { margin-left:auto; font-size:11px; color:#4a90d9; background:#1a1a3e; padding:4px 12px; border-radius:20px; border:1px solid #2d2d5e; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.titlebar-text  { font-size:13px; font-weight:700; color:#4a90d9; letter-spacing:.05em; }
+.titlebar-email { margin-left:auto; font-size:11px; color:#4a90d9; background:#1a1a3e; padding:4px 12px; border-radius:20px; border:1px solid #2d2d5e; max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .content { flex:1; overflow-y:auto; padding:20px 24px; }
 .content::-webkit-scrollbar { width:6px; }
 .content::-webkit-scrollbar-track { background:#0f0f1a; }
@@ -134,6 +130,8 @@ select { background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:
 .status-text.ok   { color:#4ade80; }
 .status-text.info { color:#4a90d9; }
 .status-text.err  { color:#f87171; }
+
+/* ── MODAIS ── */
 .modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:100; align-items:center; justify-content:center; }
 .modal-bg.show { display:flex; }
 .modal { background:#12122a; border:1px solid #2d2d5e; border-radius:14px; padding:24px; width:340px; }
@@ -143,6 +141,17 @@ select { background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:
 .modal-btns { display:flex; gap:8px; justify-content:flex-end; }
 .modal-cancel { padding:8px 16px; background:#1a1a2e; color:#4a5568; border-radius:8px; border:1px solid #1e1e3a; cursor:pointer; font-size:12px; }
 .modal-ok { padding:8px 16px; background:#1f3a8f; color:#7eb8f7; border-radius:8px; border:none; cursor:pointer; font-size:12px; font-weight:700; }
+
+/* ── MODAL CONFIRMAÇÃO SEGURO ── */
+.modal-confirm { background:#12122a; border:1px solid #2d2d5e; border-radius:14px; padding:24px; width:340px; }
+.modal-confirm h3 { font-size:15px; color:#e0e0ff; margin-bottom:8px; }
+.modal-confirm p  { font-size:13px; color:#6b7db3; margin-bottom:20px; line-height:1.5; }
+.modal-confirm-btns { display:flex; gap:8px; justify-content:flex-end; }
+.btn-confirm-cancel { padding:9px 18px; background:#1a1a2e; color:#4a5568; border-radius:8px; border:1px solid #1e1e3a; cursor:pointer; font-size:12px; }
+.btn-confirm-ok     { padding:9px 18px; background:#d93025; color:white; border-radius:8px; border:none; cursor:pointer; font-size:12px; font-weight:700; }
+.btn-confirm-ok.blue { background:linear-gradient(135deg,#1f3a8f,#4a90d9); }
+
+/* ── MODAL PRÉVIA ── */
 .modal-preview { background:#12122a; border:1px solid #2d2d5e; border-radius:14px; padding:24px; width:560px; max-width:95vw; max-height:80vh; overflow-y:auto; }
 .modal-preview h3 { font-size:15px; color:#e0e0ff; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; }
 .preview-field { margin-bottom:10px; }
@@ -158,22 +167,18 @@ select { background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:
 </head>
 <body>
 
-<!-- ══ LOADING ══ -->
+<!-- LOADING -->
 <div class="page active" id="page-loading">
   <div class="loading-icon">✉</div>
   <div>
     <div class="loading-title">G-MASS</div>
     <div class="loading-sub" style="text-align:center;margin-top:4px;">Inicializando...</div>
   </div>
-  <div class="loading-bar-wrap">
-    <div class="loading-bar"></div>
-  </div>
-  <div class="loading-dots">
-    <span></span><span></span><span></span>
-  </div>
+  <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
+  <div class="loading-dots"><span></span><span></span><span></span></div>
 </div>
 
-<!-- ══ LOGIN INFINITO VAI TRAVAR E N SEI ARRUMAR AINDA══ -->
+<!-- LOGIN -->
 <div class="page" id="page-login">
   <div class="login-card">
     <div class="logo-area">
@@ -196,14 +201,12 @@ select { background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:
       <input type="checkbox" id="chk-lembrar" checked>
       <label for="chk-lembrar">Lembrar credenciais neste computador</label>
     </div>
-    <button class="btn-login" id="btn-login" onclick="fazerLogin()">
-      Entrar ➤
-    </button>
+    <button class="btn-login" id="btn-login" onclick="fazerLogin()">Entrar ➤</button>
     <div class="login-status" id="login-status"></div>
   </div>
 </div>
 
-<!-- ══ PRINCIPAL ══ -->
+<!-- PRINCIPAL -->
 <div class="page" id="page-main">
   <div class="sidebar">
     <button class="nav-btn active" title="Envio">✉</button>
@@ -211,7 +214,6 @@ select { background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:
       onclick="document.getElementById('sec-ass').scrollIntoView({behavior:'smooth'})">✍</button>
     <button class="nav-btn logout" title="Sair" onclick="fazerLogout()">⏻</button>
   </div>
-
   <div class="main">
     <div class="titlebar">
       <div class="dots">
@@ -222,7 +224,6 @@ select { background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:
       <span class="titlebar-text">G-MASS</span>
       <span class="titlebar-email" id="titlebar-email"></span>
     </div>
-
     <div class="content">
       <div class="page-header">
         <div>
@@ -291,9 +292,7 @@ select { background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:
         <div class="footer-row">
           <button class="btn-clear"   onclick="limpar()">Limpar tudo</button>
           <button class="btn-preview" onclick="abrirPrevia()">Prévia do e-mail</button>
-          <button class="btn-send" id="btn-enviar" onclick="iniciarEnvio()">
-            Enviar para todos ➤
-          </button>
+          <button class="btn-send" id="btn-enviar" onclick="iniciarEnvio()">Enviar para todos ➤</button>
         </div>
         <div class="status-text" id="label-status">Importe uma planilha para começar.</div>
       </div>
@@ -320,16 +319,13 @@ select { background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:
       <span style="font-size:11px;color:#4a5568;font-weight:400;">1º destinatário como exemplo</span>
     </h3>
     <div class="preview-field">
-      <label>De</label>
-      <div class="value" id="prev-de"></div>
+      <label>De</label><div class="value" id="prev-de"></div>
     </div>
     <div class="preview-field">
-      <label>Para</label>
-      <div class="value" id="prev-para"></div>
+      <label>Para</label><div class="value" id="prev-para"></div>
     </div>
     <div class="preview-field">
-      <label>Assunto</label>
-      <div class="value" id="prev-assunto"></div>
+      <label>Assunto</label><div class="value" id="prev-assunto"></div>
     </div>
     <div class="preview-field">
       <label>Mensagem</label>
@@ -344,27 +340,57 @@ select { background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:
   </div>
 </div>
 
+<!-- Modal: Confirmação SEGURO — sem URL -->
+<div class="modal-bg" id="modal-confirm">
+  <div class="modal-confirm">
+    <h3 id="modal-confirm-title"></h3>
+    <p  id="modal-confirm-msg"></p>
+    <div class="modal-confirm-btns">
+      <button class="btn-confirm-cancel" onclick="resolverConfirm(false)">Cancelar</button>
+      <button class="btn-confirm-ok"     id="btn-confirm-ok" onclick="resolverConfirm(true)">Confirmar</button>
+    </div>
+  </div>
+</div>
+
 <script>
   let contatos = [];
   let statOk   = 0;
   let statErr  = 0;
+  let _confirmResolve = null;
 
-  // ── Loading → verifica login de forma assíncrona ──
+  // ── Loading ──
   window.addEventListener('pywebviewready', () => {
     setTimeout(() => {
       pywebview.api.verificar_login_salvo().then(res => {
-        if (res.logado) {
-          entrarNaSistema(res.email);
-        } else {
-          mostrarPagina('page-login');
-        }
+        if (res.logado) entrarNaSistema(res.email);
+        else mostrarPagina('page-login');
       }).catch(() => mostrarPagina('page-login'));
-    }, 800); // pequeno delay para o loading aparecer
+    }, 800);
   });
 
   function mostrarPagina(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
+  }
+
+  // ── Confirm seguro ──
+  function confirmarAcao(titulo, mensagem, corBotao = 'red') {
+    return new Promise(resolve => {
+      _confirmResolve = resolve;
+      document.getElementById('modal-confirm-title').textContent = titulo;
+      document.getElementById('modal-confirm-msg').textContent   = mensagem;
+      const btn = document.getElementById('btn-confirm-ok');
+      btn.className = 'btn-confirm-ok' + (corBotao === 'blue' ? ' blue' : '');
+      document.getElementById('modal-confirm').classList.add('show');
+    });
+  }
+
+  function resolverConfirm(resposta) {
+    document.getElementById('modal-confirm').classList.remove('show');
+    if (_confirmResolve) {
+      _confirmResolve(resposta);
+      _confirmResolve = null;
+    }
   }
 
   // ── Login ──
@@ -393,8 +419,12 @@ select { background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:
     pywebview.api.get_assinaturas().then(nomes => popularCombo(nomes));
   }
 
-  function fazerLogout() {
-    if (!confirm('Deseja sair da sua conta?')) return;
+  async function fazerLogout() {
+    const ok = await confirmarAcao(
+      'Sair da conta',
+      'Deseja desconectar sua conta do G-MASS?'
+    );
+    if (!ok) return;
     pywebview.api.fazer_logout().then(() => {
       document.getElementById('input-email').value = '';
       document.getElementById('input-senha').value = '';
@@ -416,7 +446,7 @@ select { background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:
     if (e.key === 'Enter') fazerLogin();
   });
 
-  // ── Modelo exl ──
+  // ── Modelo ──
   function baixarModelo() {
     pywebview.api.baixar_modelo().then(res => {
       if (res.ok) setStatus(`Modelo "${res.arquivo}" salvo!`, 'ok');
@@ -449,7 +479,7 @@ select { background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:
 
   function confirmarAssinatura() {
     const nome = document.getElementById('input-nome-ass').value.trim();
-    if (!nome) { alert('Digite um nome.'); return; }
+    if (!nome) { setStatus('Digite um nome para a assinatura.', 'err'); return; }
     fecharModal('modal-ass');
     pywebview.api.adicionar_assinatura(nome).then(res => {
       if (res.ok) {
@@ -460,10 +490,14 @@ select { background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:
     });
   }
 
-  function removerAssinatura() {
+  async function removerAssinatura() {
     const nome = document.getElementById('combo-ass').value;
-    if (!nome) { alert('Selecione uma assinatura.'); return; }
-    if (!confirm(`Remover '${nome}'?`)) return;
+    if (!nome) { setStatus('Selecione uma assinatura para remover.', 'err'); return; }
+    const ok = await confirmarAcao(
+      'Remover assinatura',
+      `Deseja remover a assinatura "${nome}"?`
+    );
+    if (!ok) return;
     pywebview.api.remover_assinatura(nome).then(res => {
       popularCombo(res.nomes);
       setStatus('Assinatura removida.', 'info');
@@ -563,7 +597,7 @@ select { background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:
     document.getElementById('label-pct').textContent  = pct + '%';
     document.getElementById('label-prog').textContent = `Enviando ${atual} de ${total}...`;
     setStatus(`Enviando ${atual} de ${total}...`, 'info');
-    document.getElementById('delay-fill').style.width     = '0%';
+    document.getElementById('delay-fill').style.width      = '0%';
     document.getElementById('delay-countdown').textContent = '';
   }
 
@@ -613,7 +647,6 @@ select { background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:
     el.className   = 'status-text' + (tipo ? ' ' + tipo : '');
   }
 
-  // ── Segurança: escapa HTML para evitar XSS ──
   function escapeHtml(str) {
     if (!str) return '';
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;')
@@ -621,7 +654,7 @@ select { background:#0f0f1a; border:1px solid #1e1e3a; border-radius:8px; color:
   }
 
   // Fechar modais ao clicar fora
-  ['modal-ass','modal-preview'].forEach(id => {
+  ['modal-ass','modal-preview','modal-confirm'].forEach(id => {
     document.getElementById(id).addEventListener('click', function(e) {
       if (e.target === this) fecharModal(id);
     });
